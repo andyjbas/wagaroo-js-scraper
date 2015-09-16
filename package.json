@@ -1,0 +1,13 @@
+{
+  "name": "wagaroo-js-scraper",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "scraper": "node_modules/phantomjs/lib/phantom/bin/phantomjs index.js",
+    "clean": "rm page.html"
+  },
+  "private": "true",
+  "dependencies": {
+    "phantomjs": "^1.9.18"
+  }
+}
