@@ -6,8 +6,15 @@ Generate an HTML file of a phantomjs scraped web page. Meant for web pages with 
 
 * First, install [node](https://nodejs.org).
 * Within the project directory, install dependencies by running `npm install`.
+* Install the CLI tool on your system by running `npm link`.
 
 ## Usage
 
-* The scraper can be run on it's own by running `npm run scraper` within the project directory.
-* If you wish to run it directly from an `R` script, you can use the `R` `system` command - `system("npm run scraper")`. It's important to note that the `R` script file MUST be in the same directory as the JS scraper for this to work. See `example.R`.
+* `wagaroo-js-scraper --url=http://google.com`
+* See `example.R`.
+
+### Options
+
+* **--url** - Required. The url of the web page to scrape.
+* **--name** - Optional. The name of the file that will be saved to the `./output` folder. E.g. `--name=wagaroo` will create `./output/wagaroo.html`. Useful if you are needing to scrape and save many pages within a script.
+* **--wait-for** - Optional. A comma separated list of css selectors that you want to be present on the page before scraping the html. Useful when scraping pages that have content loaded some time after initial page load. E.g. `--wait-for=.someclass`, or `--wait-for=.someclass,#someId,someElement`
