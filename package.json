@@ -3,11 +3,16 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "scraper": "node_modules/phantomjs/lib/phantom/bin/phantomjs index.js",
-    "clean": "rm page.html"
+    "clean": "rm output/*"
+  },
+  "bin": {
+    "wagaroo-js-scraper": "bin/cli"
   },
   "private": "true",
   "dependencies": {
-    "phantomjs": "^1.9.18"
-  }
+    "bluebird": "^2.10.1",
+    "minimist": "^1.2.0",
+    "phantomjs": "https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.18.tgz"
+  },
+  "devDependencies": {}
 }

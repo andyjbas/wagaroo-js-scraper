@@ -1,15 +1,41 @@
 var fs = require('fs'),
     webPage = require('webpage'),
-    page = webPage.create();
+    page = webPage.create(),
+    minimist = require('minimist'),
+    system = require('system'),
+    argv = minimist(system.args),
+    Promise = require('bluebird'),
+    waitFor = require('./lib/phantomjs-wait-for');
 
-page.open('http://www.michiganhumane.org/adoption/dogs', function(status) {
-  // A more appropriate approach would be to wait for specific elements on the page
-  // to finish loading, therefore signifying a complete load and removing the need
-  // for an explicit timeout.
-  setTimeout(function() {
-    fs.write('./page.html', page.content, 'w');
-    console.log('Successfully scraped webpage to "./page.html"');
-    phantom.exit();
-  }, 10000);
+var url = argv['url'];
+if (!url) {
+  console.error('Must provide a url option');
+  phantom.exit();
+}
+
+var waitForList;
+waitForList = argv['wait-for'] || 'html';
+waitForList = waitForList.split(',');
+
+var name = argv['name'] || 'page';
+var outputPath = './output/'+name+'.html';
+
+page.open(url, function(status) {
+  return Promise.map(waitForList, waitForAsync)
+    .then(function() {
+      fs.write(outputPath, page.content, 'w');
+      console.log('Successfully scraped webpage to "'+outputPath+'"');
+    })
+    .finally(phantom.exit);
 });
 
+function waitForAsync(selector) {
+  return new Promise(function(resolve) {
+    var condition = function() {
+      var condStr = "page.evaluate(function() { return !!document.querySelector(\""+selector+"\"); });";
+      return eval(condStr);
+    }
+
+    waitFor(condition, resolve);
+  });
+}
